@@ -98,7 +98,7 @@ form.addEventListener("keyup", (e) => {
 })
 
 const fetchData = async(data, messageDiv) => {
-    const response = await fetch("http://localhost:5000/ask/me/anything", {
+    const response = await fetch("https://codex-openai-chatboat.onrender.com/ask/me/anything", {
         method: "POST",
         headers: {
             'Content-Type': 'application/json'

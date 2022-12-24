@@ -5,7 +5,7 @@ const {Configuration, OpenAIApi} = require("openai");
 
 // dotenv configuration
 dotenv.config();
-console.log("api key", process.env.OPENAI_API_KEY);
+// console.log("api key", process.env.OPENAI_API_KEY);
 // openai configuration
 const configuration = new Configuration({
     apiKey: process.env.OPENAI_API_KEY
@@ -29,7 +29,6 @@ app.get("/", (req, res) => {
 app.post("/ask/me/anything", async(req, res) => {
     try {
         const prompt = req.body.prompt;
-        console.log(prompt);
 
         const response = await openai.createCompletion({
             model: "text-davinci-003",
