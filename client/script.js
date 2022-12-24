@@ -3,124 +3,171 @@ import user from "./assets/user.svg";
 
 const form = document.querySelector("form");
 const chatContainer = document.querySelector("#chat_container");
+const menu = document.querySelector(".menu");
+const toltip = document.querySelector(".toltip");
+const reset = document.querySelector("#reset");
+const delete_history = document.querySelector(".delete_history");
 
 
+
+// Display previous chat history
+const prevChat = getPreviousChat();
+prevChat.map((chat) => {
+  chatContainer.innerHTML += chatStripe(chat.isAi, chat.text);
+});
+
+
+// History event handler
+(function menuEventHandler() {
+  menu.addEventListener("click", () => {
+    toltip.classList.toggle("hide_show");
+  });
+  reset.addEventListener("mouseleave", () => {
+    toltip.classList.remove("hide_show");
+  });
+  delete_history.addEventListener("click", () => {
+    const confirmation = confirm("Are you sure?");
+    if (confirmation) {
+      localStorage.removeItem("codex_data");
+      window.location.reload(true);
+    }
+  });
+})();
+
+// Get previous chat history from localhost
+function getPreviousChat() {
+  const previousChat = JSON.parse(localStorage.getItem("codex_data"));
+  return previousChat ? previousChat : [];
+}
+
+// Set chat message in localStorage
+function setChatLocalStorage(isAi, text) {
+  localStorage.setItem(
+    "codex_data",
+    JSON.stringify([
+      ...getPreviousChat(),
+      {
+        isAi,
+        text,
+      },
+    ])
+  );
+}
+
+// loader function -> wait for response
 let loadInterval;
-
 function loader(element) {
-      element.textContent = ".";
+  element.textContent = "";
 
-    loadInterval = setInterval(() => {
-            element.textContent += "."
+  loadInterval = setInterval(() => {
+    element.textContent += ".";
 
-            if(element.textContent === "....") {
-                element.textContent = "";
-            }
-    }, 300)
+    if (element.textContent === "....") {
+      element.textContent = "";
+    }
+  }, 300);
 }
 
-
-
+// Print text as like typing for better user experience
 function typeText(element, text) {
+  setChatLocalStorage(true, text);
 
-    let index = 0;
+  let index = 0;
 
-    let interval = setInterval(() => {
-        if(index < text.length){
-
-            element.innerHTML += text.charAt(index)
-            index++;
-        }else{
-            clearInterval(interval);
-                    }
-    }, 20)
+  let interval = setInterval(() => {
+    if (index < text.length) {
+      element.innerHTML += text.charAt(index);
+      index++;
+    } else {
+      clearInterval(interval);
+    }
+  }, 20);
 }
 
-
+// Generate a unique ID
 function generateUniqueId() {
-    let timestamp = Date.now();
-    let randomNumber = Math.random()
-    let hexadecimalString = randomNumber.toString(16);
+  let timestamp = Date.now();
+  let randomNumber = Math.random();
+  let hexadecimalString = randomNumber.toString(16);
 
-    return `id-${timestamp}-${hexadecimalString}`
+  return `id-${timestamp}-${hexadecimalString}`;
 }
 
-
-
+// Print message(user & bot)
 function chatStripe(isAi, value, uniqueId) {
-
-    return (
-        `
-            <div class="wrapper ${isAi && 'ai'}">
+  return `
+            <div class="wrapper ${isAi && "ai"}">
                 <div class="chat">
                 <div class="profile">
                 <img
                 src="${isAi ? bot : user}"
-                alt="${isAi ? 'bot' : 'user'}"
+                alt="${isAi ? "bot" : "user"}"
                 />
                 </div>
                 <div  class="message" id="${uniqueId}">${value}</div>
   
                 </div>
             </div>
-        `
-    )
+        `;
 }
 
 
+// Handle form when submitted
 const handleSubmit = (e) => {
-    e.preventDefault();
+  e.preventDefault();
 
-    const data = new FormData(form);
+  const data = new FormData(form);
+  setChatLocalStorage(false, data.get("prompt"));
 
-    //user's chatstripe
-    chatContainer.innerHTML += chatStripe(false, data.get("prompt"));
-    form.reset();
+  //user's chatstripe
+  chatContainer.innerHTML += chatStripe(false, data.get("prompt"));
+  form.reset();
 
-    // bot's chatstripe
-    const uniqueId = generateUniqueId();
-   
-    chatContainer.innerHTML += chatStripe(true, " ", uniqueId);
+  // bot's chatstripe
+  const uniqueId = generateUniqueId();
+  chatContainer.innerHTML += chatStripe(true, " ", uniqueId);
+  chatContainer.scrollTop = chatContainer.scrollHeight;
+  const messageDiv = document.getElementById(uniqueId);
 
-    chatContainer.scrollTop = chatContainer.scrollHeight;
+  loader(messageDiv);
+  fetchData(data, messageDiv);
+};
 
-    const messageDiv = document.getElementById(uniqueId);
-
-    loader(messageDiv)
-   fetchData(data, messageDiv)
-}
-
+// add event in form
 form.addEventListener("submit", handleSubmit);
 form.addEventListener("keyup", (e) => {
-  if(e.code === "Enter") {
-        handleSubmit(e)
-   }
-})
+  if (e.code === "Enter") {
+    handleSubmit(e);
+  }
+});
 
-
-const fetchData = async(data, messageDiv) => {
-    const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/ask/me/anything`, {
-        method: "POST",
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-            prompt:  data.get("prompt")
-        })
-    })
-
-    clearInterval(loadInterval);
-    messageDiv.innerHTML = "";
-
-    if(response.ok) {
-        const data = await response.json()
-    
-        const parsedData = data.bot.trim();
-    
-       typeText(messageDiv, parsedData)
-    }else{
-        const err = await response.text();
-        messageDiv.innerHTML = "Something went wrong";
-        alert(err);
+// fetch data from server
+const fetchData = async (data, messageDiv) => {
+  const response = await fetch(
+    `${import.meta.env.VITE_BACKEND_URL}/ask/me/anything`,
+    {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        prompt: data.get("prompt"),
+      }),
     }
-}
+  );
+
+  clearInterval(loadInterval);
+  messageDiv.innerHTML = "";
+
+  if (response.ok) {
+    const data = await response.json();
+    const parsedData = data.bot.trim();
+
+    typeText(messageDiv, parsedData);
+  } else {
+    const err = await response.text();
+    messageDiv.innerHTML = "Something went wrong";
+    setChatLocalStorage(true, "Something went wrong");
+    alert(err);
+  }
+};

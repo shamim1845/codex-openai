@@ -21,6 +21,43 @@ body {
   align-items: center;
   justify-content: space-between;
 }
+#reset{
+  margin-left: auto;
+  position: fixed;
+  right: 1rem;
+  top: 1rem;
+  position: relative;
+}
+#reset .toltip{
+margin-top: 2rem;
+  padding: 0 .5rem;
+  visibility: hidden;
+}
+#reset .toltip.hide_show{
+  visibility: visible;
+}
+#reset .menu {
+  position: absolute;
+  right: 0;
+  top: 0;
+}
+#reset .menu i{
+  font-size: 1.4rem;
+  color: #fff;
+  cursor: pointer;
+}
+#reset .toltip span{
+  color: #d6d2d2;
+  cursor: pointer;
+  transition: all .5s;
+  -webkit-transition: all .5s;
+  -moz-transition: all .5s;
+  -ms-transition: all .5s;
+  -o-transition: all .5s;
+}
+#reset .toltip span:hover{
+  color: #fff;
+}
 
 #chat_container {
   flex: 1;
