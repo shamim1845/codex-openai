@@ -117,6 +117,10 @@ const handleSubmit = (e) => {
   e.preventDefault();
 
   const data = new FormData(form);
+  if(data.get("prompt").trim().length < 2) {
+return
+  }
+  console.log(data.get("prompt").length);
   setChatLocalStorage(false, data.get("prompt"));
 
   //user's chatstripe
