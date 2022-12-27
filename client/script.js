@@ -14,7 +14,6 @@ const delete_history = document.querySelector(".delete_history");
 // auto response sound
 function playSound(url) {
   var ourAudio = document.createElement('audio'); // Create a audio element using the DOM
-  ourAudio.style.display = "none"; // Hide the audio element
   ourAudio.src = url; // Set resource to our URL
   ourAudio.autoplay = true; // Automatically play sound
   ourAudio.onended = function() {
@@ -31,14 +30,14 @@ if(prevChat.length !== 0) {
     chatContainer.innerHTML += chatStripe(chat.isAi, chat.text);
   });
   setTimeout(() => {
-    chatContainer.innerHTML += chatStripe(true, "Welcome to codex for coming back. How can I help you?");
     playSound(alert)
+    chatContainer.innerHTML += chatStripe(true, "Welcome to codex for coming back. How can I help you?");
 
   }, 2000)
 }else{
   setTimeout(() => {
-    chatContainer.innerHTML += chatStripe(true, "Welcome to codex by OpenAi. How can I help you?");
     playSound(alert)
+    chatContainer.innerHTML += chatStripe(true, "Welcome to codex by OpenAi. How can I help you?");
 
   }, 2000)
 }
