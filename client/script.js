@@ -1,6 +1,8 @@
 import bot from "./assets/bot.svg";
 import user from "./assets/user.svg";
+import alert from "./assets/iphone_notification.mp3";
 
+const app = document.getElementById("app")
 const form = document.querySelector("form");
 const chatContainer = document.querySelector("#chat_container");
 const menu = document.querySelector(".menu");
@@ -8,6 +10,18 @@ const toltip = document.querySelector(".toltip");
 const reset = document.querySelector("#reset");
 const delete_history = document.querySelector(".delete_history");
 
+
+// auto response sound
+function playSound(url) {
+  var ourAudio = document.createElement('audio'); // Create a audio element using the DOM
+  ourAudio.style.display = "none"; // Hide the audio element
+  ourAudio.src = url; // Set resource to our URL
+  ourAudio.autoplay = true; // Automatically play sound
+  ourAudio.onended = function() {
+    this.remove(); // Remove when played.
+  };
+ app.appendChild(ourAudio);
+}
 
 
 // Display previous chat history
@@ -18,11 +32,13 @@ if(prevChat.length !== 0) {
   });
   setTimeout(() => {
     chatContainer.innerHTML += chatStripe(true, "Welcome to codex for coming back. How can I help you?");
+    playSound(alert)
 
   }, 2000)
 }else{
   setTimeout(() => {
     chatContainer.innerHTML += chatStripe(true, "Welcome to codex by OpenAi. How can I help you?");
+    playSound(alert)
 
   }, 2000)
 }
