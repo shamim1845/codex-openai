@@ -181,7 +181,25 @@ button {
   background: transparent;
 }
 
-form img {
+form svg {
   width: 30px;
   height: 30px;
+  color: #fff;
+}
+
+footer{
+  width: 100%;
+  padding: .5rem 0;
+  /* background-color: #5436DA; */
+  /* text-align: center; */
+}
+footer span{
+color: #fff;
+display: flex;
+justify-content: center;
+align-items: center;
+}
+footer span i{
+  color: teal;
+  font-size: 1.3rem;
 }

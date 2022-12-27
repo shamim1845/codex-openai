@@ -5,8 +5,11 @@
     <link rel="icon" type="image/svg+xml" href="/favicon.ico" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Codex - Your Coding AI</title>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.2/font/bootstrap-icons.css">
-    <link rel="stylesheet" href="style.css">
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.2/font/bootstrap-icons.css"
+    />
+    <link rel="stylesheet" href="style.css" />
   </head>
   <body>
     <div id="app">
@@ -14,19 +17,29 @@
         <div class="menu">
           <i class="bi bi-three-dots-vertical"></i>
         </div>
-        <div class="toltip ">
+        <div class="toltip">
           <span class="delete_history">delete history</span>
         </div>
       </div>
-      <div id="chat_container">
-      </div>
+      <div id="chat_container"></div>
       <form>
-        <textarea name="prompt" id="" cols="1" rows="1" placeholder="Ask Me Anything..."></textarea>
-        <button type="submit"><img src="assets/send.svg" alt=""></button>
+        <textarea
+          name="prompt"
+          id=""
+          cols="1"
+          rows="1"
+          autofocus="on"
+          placeholder="Ask Me Anything..."
+        ></textarea>
+        <button type="submit"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-6 h-6">
+          <path d="M3.478 2.405a.75.75 0 00-.926.94l2.432 7.905H13.5a.75.75 0 010 1.5H4.984l-2.432 7.905a.75.75 0 00.926.94 60.519 60.519 0 0018.445-8.986.75.75 0 000-1.218A60.517 60.517 0 003.478 2.405z" />
+        </svg>
+        </button>
       </form>
+      <footer>
+        <span>Created by <i class="bi bi-arrow-through-heart-fill"></i> with Shamim</span>
+      </footer>
     </div>
     <script type="module" src="/script.js"></script>
   </body>
 </html>
-
-

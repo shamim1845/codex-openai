@@ -12,9 +12,20 @@ const delete_history = document.querySelector(".delete_history");
 
 // Display previous chat history
 const prevChat = getPreviousChat();
-prevChat.map((chat) => {
-  chatContainer.innerHTML += chatStripe(chat.isAi, chat.text);
-});
+if(prevChat.length !== 0) {
+  prevChat.map((chat) => {
+    chatContainer.innerHTML += chatStripe(chat.isAi, chat.text);
+  });
+  setTimeout(() => {
+    chatContainer.innerHTML += chatStripe(true, "Welcome to codex for coming back. How can I help you?");
+
+  }, 2000)
+}else{
+  setTimeout(() => {
+    chatContainer.innerHTML += chatStripe(true, "Welcome to codex by OpenAi. How can I help you?");
+
+  }, 2000)
+}
 
 
 // History event handler
